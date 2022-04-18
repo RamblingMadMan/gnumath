@@ -1,0 +1,16 @@
+# Editor/Desktop files
+*.kate-swp
+
+# Build remnants
+*.o
+build
+build-*
+cmake-build-*
+
+# Output files
+prefix
+prefix-*
+*.tar.gz
+*.so
+*.a
+*.la
