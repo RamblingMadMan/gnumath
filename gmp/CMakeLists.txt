@@ -20,6 +20,7 @@ ExternalProject_Add(
 )
 
 add_library(gmplib SHARED IMPORTED)
+add_library(gmpxxlib SHARED IMPORTED)
 
 add_dependencies(gmplib gmplib_ext)
 
@@ -27,6 +28,7 @@ set(GMP_INCLUDE_DIRS ${CMAKE_CURRENT_BINARY_DIR}/gmplib/include CACHE STRING "GN
 set(GMP_LIBRARIES gmplib CACHE STRING "GNU MP Libraries" FORCE)
 
 target_include_directories(gmplib INTERFACE ${GMP_INCLUDE_DIRS})
+target_link_libraries(gmpxxlib INTERFACE gmplib)
 
 if(WIN32)
 	set_target_properties(
@@ -34,9 +36,20 @@ if(WIN32)
 		IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/gmplib/lib/gmp.dll
 		IMPORTED_IMPLIB ${CMAKE_CURRENT_BINARY_DIR}/gmplib/lib/gmp.lib
 	)
+
+	set_target_properties(
+		gmpxxlib PROPERTIES
+		IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/gmplib/lib/gmpxx.dll
+		IMPORTED_IMPLIB ${CMAKE_CURRENT_BINARY_DIR}/gmplib/lib/gmpxx.lib
+	)
 else()
 	set_target_properties(
 		gmplib PROPERTIES
 		IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/gmplib/lib/libgmp.so
+	)
+
+	set_target_properties(
+		gmpxxlib PROPERTIES
+		IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/gmplib/lib/libgmpxx.so
 	)
 endif()
