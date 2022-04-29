@@ -6,13 +6,24 @@ set -e
 # https://stackoverflow.com/a/246128
 SCRIPT_DIR=$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
 
-ANDROID_API=29
-ANDROID_TRIPLET="aarch64-linux-android"
+if [ -z ${TARGET_ABI+x} ]; then
+	TARGET_ABI=aarch64
+fi
+
+if [ -z ${TARGET_NDK_VERSION+x} ]; then
+	TARGET_NDK_VERSION="23.1.7779620"
+fi
+
+if [ -z ${ANDROID_API+x} ]; then
+	ANDROID_API=30
+fi
+
+ANDROID_TRIPLET="$TARGET_ABI-linux-android"
 ANDROID_NDK_VERSION="23.1.7779620"
 
 TARGET_PREFIX="$SCRIPT_DIR/prefix-$ANDROID_TRIPLET$ANDROID_API"
 
-export NDKROOT="$HOME/Android/Sdk/ndk/$ANDROID_NDK_VERSION"
+export NDKROOT="$HOME/Android/Sdk/ndk/$TARGET_NDK_VERSION"
 
 export CC="$NDKROOT/toolchains/llvm/prebuilt/linux-x86_64/bin/$ANDROID_TRIPLET$ANDROID_API-clang"
 export CXX="$NDKROOT/toolchains/llvm/prebuilt/linux-x86_64/bin/$ANDROID_TRIPLET$ANDROID_API-clang++"
